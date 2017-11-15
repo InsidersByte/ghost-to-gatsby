@@ -4,11 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "prebuild": "rimraf ./dist/",
+    "build": "babel src/ --out-dir dist/",
     "prestart": "rimraf ./pages",
     "start": "babel-node src/index.js",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern flow-typed/ .",
     "test": "yarn lint && flow check",
-    "format": "prettier --write \"*.{js,json,css,md}\" \"**/*.{js,json,css,md}\""
+    "format":
+      "prettier --write \"*.{js,json,css,md}\" \"**/*.{js,json,css,md}\""
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
@@ -29,10 +32,7 @@
     "prettier": "1.8.2"
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "dependencies": {
     "moment": "2.19.2",

@@ -34,3 +34,4 @@ build
 .vagrant
 pages
 example
+dist
