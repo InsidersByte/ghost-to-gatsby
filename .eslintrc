@@ -1,0 +1,36 @@
+{
+  "parser": "babel-eslint",
+
+  "extends": [
+    "airbnb-base",
+    "plugin:node/recommended",
+    "plugin:security/recommended",
+    "plugin:flowtype/recommended",
+    "prettier",
+    "prettier/flowtype"
+  ],
+
+  "plugins": [
+    "node",
+    "security",
+    "flowtype"
+  ],
+
+  "env": {
+    "jest": true
+  },
+
+  "rules": {
+    "max-len": [2, 160, 2],
+    "no-continue": 1,
+    "comma-dangle": ["error", "always-multiline"],
+    "no-restricted-syntax": [
+      "error",
+      "ForInStatement",
+      "LabeledStatement",
+      "WithStatement"
+    ],
+
+    "node/no-unsupported-features": ["off"]
+  }
+}
