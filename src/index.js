@@ -1,71 +1,54 @@
+#!/usr/bin/env node
+
+/* eslint-disable no-process-exit, no-console, node/shebang */
 // @flow
 
-import moment from 'moment';
-import fs from 'fs';
+import program from 'commander';
 import path from 'path';
-import json from '../example/insiders-byte.ghost.2017-11-15.json';
-import type { RootInterface } from './types';
+import fs from 'fs';
+import chalk from 'chalk';
+import createPages from './create-pages';
+import appPackage from '../package.json';
 
-type Post = {
-  path: string,
-  date: moment,
-  title: string,
-  markdown: string,
-  tags: string[],
-};
+program
+  .version(appPackage.version)
+  .usage('[options] <file>')
+  .option(
+    '--out-dir <dir>',
+    'The output directory where the pages will be written to',
+  )
+  .parse(process.argv);
 
-type Posts = Post[];
+const { args, outDir } = program;
 
-const BASE_PATH = './pages';
-const root: RootInterface = json;
-const dbs = root.db;
-
-if (dbs.length !== 1) {
-  throw new Error('Only 1 db is supported');
+if (args.length <= 0) {
+  console.log(chalk.red('Please provide a file.'));
+  process.exit(1);
 }
 
-const db = dbs[0];
-const { data } = db;
+if (args.length > 1) {
+  console.log(chalk.red('Only one file is supported.'));
+  process.exit(1);
+}
 
-const posts: Posts = data.posts.map(
-  ({ title, slug, markdown, published_at, id }) => {
-    const postTags = data.posts_tags
-      .filter(o => o.post_id === id)
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map(o => o.tag_id);
+if (outDir == null) {
+  console.log(chalk.red('out-dir not given.'));
+  process.exit(1);
+}
 
-    const tags = data.tags.filter(o => postTags.includes(o.id)).map(o => o.name );
+const [fileName] = args;
+const currentPath = process.cwd();
+const outputDirectory = path.join(currentPath, outDir);
+const filePath = path.join(currentPath, fileName);
 
-    return {
-      path: `/${slug}`,
-      date: moment(published_at),
-      title,
-      markdown,
-      tags,
-    };
-  },
-);
+if (!fs.existsSync(outputDirectory)) {
+  console.log(chalk.red(`out-dir '${outputDirectory}'' does not exist.`));
+  process.exit(1);
+}
 
-fs.mkdirSync(BASE_PATH);
+if (!fs.existsSync(filePath)) {
+  console.log(chalk.red(`file '${filePath}' does not exist.`));
+  process.exit(1);
+}
 
-posts.forEach(({ date, path: postPath, title, tags, markdown }: Post) => {
-  const basePath = path.join(
-    BASE_PATH,
-    `${date.format('YYYY-MM-DD')}-${title}`,
-  );
-  const markdownPath = path.join(basePath, 'index.md');
-
-  fs.mkdirSync(basePath);
-  fs.writeFileSync(
-    markdownPath,
-    `---
-path: "${postPath}"
-date: "${date.toISOString()}"
-title: "${title}"
-tags: ${JSON.stringify(tags)}
----
-
-${markdown}
-  `,
-  );
-});
+createPages(filePath, outputDirectory);

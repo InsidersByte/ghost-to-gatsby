@@ -1,9 +1,13 @@
 {
   "name": "ghost-to-gatsby",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",
+  "bin": {
+    "ghost-to-gatsby": "./dist/index.js"
+  },
   "scripts": {
+    "dev": "yarn build --watch",
     "prebuild": "rimraf ./dist/",
     "build": "babel src/ --out-dir dist/",
     "prestart": "rimraf ./pages",
@@ -12,6 +16,12 @@
     "test": "yarn lint && flow check",
     "format":
       "prettier --write \"*.{js,json,css,md}\" \"**/*.{js,json,css,md}\""
+  },
+  "dependencies": {
+    "chalk": "2.3.0",
+    "commander": "2.11.0",
+    "moment": "2.19.2",
+    "rimraf": "2.6.2"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
@@ -33,9 +43,5 @@
   },
   "lint-staged": {
     "*.{js,json,css,md}": ["prettier --write", "git add"]
-  },
-  "dependencies": {
-    "moment": "2.19.2",
-    "rimraf": "2.6.2"
   }
 }
