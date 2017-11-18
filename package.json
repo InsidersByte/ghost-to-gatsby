@@ -1,6 +1,6 @@
 {
   "name": "ghost-to-gatsby",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "bin": {
@@ -14,8 +14,7 @@
     "start": "babel-node src/index.js",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern flow-typed/ .",
     "test": "yarn lint && flow check",
-    "format":
-      "prettier --write \"*.{js,json,css,md}\" \"**/*.{js,json,css,md}\""
+    "format": "prettier --write \"*.{js,json,css,md}\" \"**/*.{js,json,css,md}\""
   },
   "dependencies": {
     "chalk": "2.3.0",
@@ -42,6 +41,9 @@
     "prettier": "1.8.2"
   },
   "lint-staged": {
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
