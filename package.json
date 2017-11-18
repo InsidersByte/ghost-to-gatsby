@@ -3,18 +3,22 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "files": ["dist"],
   "bin": {
     "ghost-to-gatsby": "./dist/index.js"
   },
   "scripts": {
+    "precommit": "lint-staged",
     "dev": "yarn build --watch",
     "prebuild": "rimraf ./dist/",
     "build": "babel src/ --out-dir dist/",
     "prestart": "rimraf ./pages",
     "start": "babel-node src/index.js",
+    "prepublish": "yarn build",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern flow-typed/ .",
     "test": "yarn lint && flow check",
-    "format": "prettier --write \"*.{js,json,css,md}\" \"**/*.{js,json,css,md}\""
+    "format":
+      "prettier --write \"*.{js,json,css,md}\" \"**/*.{js,json,css,md}\""
   },
   "dependencies": {
     "chalk": "2.3.0",
@@ -41,9 +45,6 @@
     "prettier": "1.8.2"
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   }
 }
