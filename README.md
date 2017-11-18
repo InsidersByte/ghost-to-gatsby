@@ -51,6 +51,6 @@ ghost-to-gatsby [options] <file>
 
 * [x] Create basic pages
 * [x] Convert to CLI
-* [ ] Publish to npm to use with npx
+* [X] Publish to npm to use with npx
 * [x] Add tags
 * [ ] Download all images
