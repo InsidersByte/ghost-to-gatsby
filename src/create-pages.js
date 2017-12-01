@@ -1,22 +1,35 @@
 // @flow
 
 import moment from 'moment';
+import remark from 'remark';
+import download from 'image-downloader';
 import chalk from 'chalk';
+import url from 'url';
 import fs from 'fs';
 import path from 'path';
+import createPage from './create-page';
+import extractImages from './extract-images';
 import type { RootInterface } from './types';
 
 type Post = {
-  path: string,
+  slug: string,
   date: moment,
   title: string,
+  image: string,
   markdown: string,
   tags: string[],
+  draft: boolean,
+  featured: boolean,
 };
 
 type Posts = Post[];
 
-const createPages = (filePath: string, outputDirectory: string) => {
+const getImagePath = imageUrl => {
+  const parsed = url.parse(imageUrl);
+  return path.basename(parsed.pathname || '');
+};
+
+const createPages = async (filePath: string, outputDirectory: string) => {
   console.log(chalk.green(`reading file '${filePath}'`));
   const contents = fs.readFileSync(filePath, 'utf8');
 
@@ -35,7 +48,7 @@ const createPages = (filePath: string, outputDirectory: string) => {
   console.log(chalk.green(`${data.posts.length} posts found`));
 
   const posts: Posts = data.posts.map(
-    ({ title, slug, markdown, published_at, id }) => {
+    ({ title, slug, image, markdown, published_at, id, status, featured }) => {
       const postTags = data.posts_tags
         .filter(o => o.post_id === id)
         .sort((a, b) => a.sort_order - b.sort_order)
@@ -46,39 +59,21 @@ const createPages = (filePath: string, outputDirectory: string) => {
         .map(o => o.name);
 
       return {
-        path: `/${slug}`,
+        slug,
         date: moment(published_at),
         title,
+        image,
         markdown,
         tags,
+        draft: status !== 'published',
+        featured: featured === 1,
       };
     },
   );
 
-  posts.forEach(({ date, path: postPath, title, tags, markdown }: Post) => {
-    const folderName = `${date.format('YYYY-MM-DD')}-${title}`
-      .toLowerCase()
-      .replace(/ /g, '-');
+  const pages = posts.map(post => createPage(post, outputDirectory));
 
-    const basePath = path.join(outputDirectory, folderName);
-    const markdownPath = path.join(basePath, 'index.md');
-
-    console.log(chalk.green(`Processing ${folderName}`));
-
-    fs.mkdirSync(basePath);
-    fs.writeFileSync(
-      markdownPath,
-      `---
-path: "${postPath}"
-date: "${date.toISOString()}"
-title: "${title}"
-tags: ${JSON.stringify(tags)}
----
-
-${markdown}
-  `,
-    );
-  });
+  await Promise.all(pages);
 
   console.log(chalk.green('Done'));
 };

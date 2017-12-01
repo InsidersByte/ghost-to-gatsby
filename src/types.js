@@ -93,7 +93,7 @@ type Posts = {
   image: string,
   featured: number,
   page: number,
-  status: string,
+  status: 'draft' | 'published',
   language: string,
   visibility: string,
   meta_title: string,

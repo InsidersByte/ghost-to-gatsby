@@ -55,4 +55,6 @@ ghost-to-gatsby [options] <file>
 * [x] Convert to CLI
 * [x] Publish to npm to use with npx
 * [x] Add tags
-* [ ] Download all images
+* [x] Extract Images in Post
+* [x] Extract Post Image
+* [ ] Extract Authors
