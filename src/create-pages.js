@@ -1,14 +1,9 @@
 // @flow
 
 import moment from 'moment';
-import remark from 'remark';
-import download from 'image-downloader';
 import chalk from 'chalk';
-import url from 'url';
 import fs from 'fs';
-import path from 'path';
 import createPage from './create-page';
-import extractImages from './extract-images';
 import type { RootInterface } from './types';
 
 type Post = {
@@ -23,11 +18,6 @@ type Post = {
 };
 
 type Posts = Post[];
-
-const getImagePath = imageUrl => {
-  const parsed = url.parse(imageUrl);
-  return path.basename(parsed.pathname || '');
-};
 
 const createPages = async (filePath: string, outputDirectory: string) => {
   console.log(chalk.green(`reading file '${filePath}'`));

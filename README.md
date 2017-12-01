@@ -1,6 +1,7 @@
 # ghost-to-gatsby
 
-[![npm](https://img.shields.io/npm/v/ghost-to-gatsby.svg)](https://www.npmjs.com/package/ghost-to-gatsby)
+[![npm](https://img.shields.io/npm/v/ghost-to-gatsby.svg)](https://www.npmjs.com/package/ghost-to-gatsby)\
+[![Build Status](https://travis-ci.org/InsidersByte/ghost-to-gatsby.svg?branch=master)](https://travis-ci.org/InsidersByte/ghost-to-gatsby)
 
 :construction: A CLI to convert a ghost 0.11 export to gatsby pages
 :construction:
